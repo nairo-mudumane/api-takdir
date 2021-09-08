@@ -1,7 +1,7 @@
 {
   "name": "api-takdir",
   "version": "1.0.0",
-  "description": "",
+  "description": "API Rest da aplicativo oficial do Takdir",
   "main": "server.js",
   "scripts": {
     "start": "npm start",
