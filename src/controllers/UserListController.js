@@ -1,5 +1,6 @@
 const db = require('../utils/config').defaultDatabase;
 const user_list_ref = 'user_list';
+
 exports.get = (req, res, next) => {
   const list = [];
   const getUserList = async () => {
@@ -49,11 +50,14 @@ exports.post = (req, res) => {
 };
 
 exports.put = (req, res, next) => {
-  res.status(201).send([{ status: 'OK', msg: 'rota update user by id' }]);
+  const user_uid = req.params.user_uid;
+  res
+    .status(201)
+    .send([{ status: 'OK', msg: `rota update user by id: ${user_uid}` }]);
 };
 
 exports.delete = (req, res, next) => {
-  let user_uid = req.params.user_uid;
+  const user_uid = req.params.user_uid;
   res
     .status(201)
     .send([{ status: 'OK', msg: `rota delete by id: ${user_uid}` }]);
