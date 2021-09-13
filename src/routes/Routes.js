@@ -14,7 +14,7 @@ exports.get = (req, res) => {
     {
       name: `post new user`,
       method: `POST`,
-      url: `hostname/user/new`,
+      url: `hostname/users/`,
     },
     {
       name: `product list`,
@@ -29,7 +29,7 @@ exports.get = (req, res) => {
     {
       name: `post new product`,
       method: `POST`,
-      url: `hostname/product/new`,
+      url: `hostname/products/`,
     },
   ]);
 };
