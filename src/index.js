@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const App = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
+
+App.use(cors());
+App.use(express.urlencoded({ extended: false }));
+App.use(express.json());
 
 require('./routes/index')(App);
 
-App.use(cors());
-App.use(express.json());
-App.listen(port, () => console.log('server running'));
+App.listen(port, () => console.log(`API running on: http://localhost:${port}`));
