@@ -1,6 +1,22 @@
 const db = require('../utils/config').defaultDatabase;
 exports.get = (req, res, next) => {
-  res.status(201).send([{ status: 'OK', msg: 'rota get all users' }]);
+  const list = [];
+  const getUserList = async () => {
+    /* await db.ref('user_list').get('value', (snapshot) => {
+      snapshot.forEach((user) => {
+        // const userValue = user.val();
+        list.push(user.val());
+        return res.status(200).send(list);
+      });
+    }); */
+    await db.ref('user_list').once('value', (snapshot) => {
+      snapshot.forEach((user) => {
+        list.push(user.val());
+      });
+      return res.status(200).send(list);
+    });
+  };
+  getUserList();
 };
 
 exports.getById = (req, res, next) => {
