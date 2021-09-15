@@ -14,15 +14,20 @@ exports.post = (req, res, next) => {
     });
   }
   function checkUser(userList) {
-    const validUser = [];
+    let validUser = '';
     userList.forEach((user) => {
       if (user.email === data.email && user.password === data.password) {
-        validUser.push(user.uid);
+        validUser = user.uid;
       }
     });
-    return validUser
-      ? res.status(404).send([{ error: true, msg: 'not found' }])
-      : res.status(200).send([{ error: false, data: validUser }]);
+
+    if (validUser === '') {
+      return res
+        .status(404)
+        .send([{ error: true, msg: 'not found', data: [] }]);
+    } else {
+      return res.status(200).send([{ error: false, uid: validUser }]);
+    }
   }
 
   getUserList();
