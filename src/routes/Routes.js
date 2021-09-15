@@ -31,5 +31,10 @@ exports.get = (req, res) => {
       method: `POST`,
       url: `hostname/products/`,
     },
+    {
+      name: `login user`,
+      method: `POST`,
+      url: `hostname/login/user`,
+    },
   ]);
 };
