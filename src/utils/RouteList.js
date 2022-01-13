@@ -25,6 +25,7 @@ const routes = [
     body: {
       name: "str | required",
       price: "float | required",
+      total_available: "int | required",
       is_free: "bool | required",
       is_special: "bool | required",
       description: "str | required",
