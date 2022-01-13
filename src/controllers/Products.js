@@ -5,20 +5,21 @@ exports.getAll = async (req, res, next) => {
   const list = [];
 
   try {
-    await db
-      .ref(product_list_ref)
-      .once("value", (snapshot) => {
-        snapshot.forEach((product) => {
-          list.push(product.val());
-        });
-      })
-      .then(() => {
-        const data = { error: false, status: "ok", data: list };
-        return res.status(200).send(data);
+    await db.ref(product_list_ref).once("value", (snapshot) => {
+      snapshot.forEach((product) => {
+        list.push(product.val());
       });
+      if (list.length === 0) {
+        const data = { error: true, status: 404, message: "no product found" };
+        return res.status(404).json(data);
+      } else {
+        const data = { error: false, status: 200, data: list };
+        return res.status(200).json(data);
+      }
+    });
   } catch (err) {
     const data = { error: true, message: err.message };
-    return res.status(400).send(data);
+    return res.status(400).json(data);
   }
 };
 
@@ -33,41 +34,43 @@ exports.getById = async (req, res, next) => {
       });
 
       if (list.length === 0) {
-        const data = { error: true, message: "not found" };
-        return res.status(404).send(data);
+        const data = { error: true, status: 404, message: "no product found" };
+        return res.status(404).json(data);
       } else {
+        const data = { error: false, status: 200 };
         list.forEach((product) => {
           if (product.uid === id_product) {
-            const data = { error: false, status: "ok" };
             return (data["data"] = product);
           }
         });
-        return res.status(200).send(data);
+        return res.status(200).json(data);
       }
     });
   } catch (err) {
     const data = { error: true, message: err.message };
-    return res.status(400).send(data);
+    return res.status(400).json(data);
   }
 };
 
-// exports.post = (req, res, next) => {
-//   const data = req.body;
-//   if (!data)
-//     return res.status(204).send([{ status: "ERROR", msg: "No Content" }]);
+exports.new = async (req, res, next) => {
+  const req_body = req.body;
 
-//   const postProduct = async () => {
-//     const { v4: uuidv4 } = require("uuid");
-//     data["uid"] = uuidv4();
-//     await db
-//       .ref(product_list_ref)
-//       .child(data.uid)
-//       .set(data)
-//       .catch((err) => console.log(err));
-//   };
-//   postProduct();
-//   return res.status(200).send([{ status: "OK", msg: "Created" }]);
-// };
+  if (!req_body["name"]) {
+    const data = { error: true, status: 400, message: "no body sent" };
+    return res.status(400).json(data);
+  }
+
+  try {
+    const { v4: uuidv4 } = require("uuid");
+    req_body["uid"] = uuidv4();
+    await db.ref(product_list_ref).child(req_body.uid).set(req_body);
+    const data = { error: false, status: 201, message: "created" };
+    return res.status(201).json(data);
+  } catch (err) {
+    const data = { error: true, message: err.message };
+    return res.status(400).json(data);
+  }
+};
 
 // exports.put = (req, res, next) => {
 //   const product_uid = req.params.product_uid;
