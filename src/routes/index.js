@@ -1,13 +1,10 @@
-const getUserList = require('./getUserList');
-const getProductList = require('./getProductList');
-const Login = require('./Login');
-const Route = require('./Routes');
-module.exports = (App) => {
-  getUserList(App);
-  getProductList(App);
-  Login(App);
+const Routes = require("../utils/RouteList");
+const Products = require("./Products");
 
-  App.get('/', (req, res) => res.send('No body returned for response'));
-  App.get('/routes', Route.get);
-  App.get('/*', (req, res) => res.redirect('/'));
+module.exports = (App) => {
+  Products(App);
+
+  App.get("/", (req, res) => res.send("No body returned for response"));
+  App.get("/routes", Routes.get);
+  App.get("/*", (req, res) => res.redirect("/"));
 };
